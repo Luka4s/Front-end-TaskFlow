@@ -225,7 +225,7 @@ export function List() {
   return (
     <>
       <Toaster richColors position="top-center" />
-      <div className=" flex flex-col items-center space-y-9 text-zinc-100 ">
+      <div className=" flex flex-col items-center space-y-9 text-zinc-100 h-screen">
         <div className="border-2 border-t-0 border-l-0 border-r-0 flex justify-end w-full p-4 items-center">
           <h1 className="text-xl text-end">
             Usuario: {nameProfile ? nameProfile : "Desconhecido"}
@@ -234,8 +234,51 @@ export function List() {
             <LogOut className="text-red-600 hover:text-red-300" />
           </Button>
         </div>
-        <div className="space-y-9">
-          <form onSubmit={handleAddTask} className="flex flex-col space-y-3">
+        <div className="space-y-9 flex flex-col w-80">
+          <Accordion type="single" collapsible>
+            <AccordionItem value={"item-1"}>
+              <AccordionTrigger>
+                <span className="flex justify-between  w-full">Cadastro</span>
+              </AccordionTrigger>
+              <form
+                onSubmit={handleAddTask}
+                className="flex flex-col space-y-3 "
+              >
+                <AccordionContent className="flex flex-col w-full space-y-2">
+                  <label htmlFor="title" className="text-lg">
+                    Título da nova atividade:
+                  </label>
+                  <Input
+                    type="text"
+                    id="title"
+                    className="text-black rounded-lg border-2 border-muted-foreground  bg-white "
+                    value={titleTask}
+                    onChange={(e) => setTitleTask(e.target.value)}
+                    required
+                  />
+
+                  <label htmlFor="contentTask" className="text-base">
+                    Digite o conteúdo da nova atividade:
+                  </label>
+                  <Textarea
+                    id="contentTask"
+                    className="text-black border-muted-foreground resize-none"
+                    value={contentTask}
+                    onChange={(e) => setContentTask(e.target.value)}
+                  />
+                  <Button
+                    type="submit"
+                    variant={"ghost"}
+                    className="bg-emerald-600 text-zinc-50"
+                  >
+                    Criar uma nova atividade
+                  </Button>
+                </AccordionContent>
+              </form>
+            </AccordionItem>
+          </Accordion>
+
+          {/*  <form onSubmit={handleAddTask} className="flex flex-col space-y-3">
             <label htmlFor="title" className="text-lg">
               Título da nova atividade:
             </label>
@@ -264,7 +307,7 @@ export function List() {
             >
               Criar uma nova atividade
             </Button>
-          </form>
+          </form> */}
 
           <Accordion type="single" collapsible>
             <AccordionItem value={"item-1"}>
@@ -295,7 +338,7 @@ export function List() {
             Atividades concluidas: {taskListCheck}
           </span>
         </div>
-        <div className="flex flex-col items-center space-y-3 w-80 h-48 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-corner-inherit scrollbar-none scrollbar-thumb-muted-foreground scrollbar-track-transparent overflow-y-scroll">
+        <div className="flex flex-col items-center space-y-3 w-80 h-52 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-corner-inherit scrollbar-none scrollbar-thumb-muted-foreground scrollbar-track-transparent overflow-y-scroll">
           {filteredList.length > 0 ? (
             <>
               {filteredList.map((item) => {
