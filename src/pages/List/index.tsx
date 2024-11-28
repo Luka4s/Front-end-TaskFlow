@@ -225,7 +225,7 @@ export function List() {
   return (
     <>
       <Toaster richColors position="top-center" />
-      <div className="border-2 flex flex-col items-center space-y-9 text-zinc-100 h-screen">
+      <div className=" flex flex-col items-center space-y-9 text-zinc-100 ">
         <div className="border-2 border-t-0 border-l-0 border-r-0 flex justify-end w-full p-4 items-center">
           <h1 className="text-xl text-end">
             Usuario: {nameProfile ? nameProfile : "Desconhecido"}
@@ -295,7 +295,7 @@ export function List() {
             Atividades concluidas: {taskListCheck}
           </span>
         </div>
-        <div className="flex flex-col items-center  space-y-3 w-72 h-72 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-corner-inherit scrollbar-none scrollbar-thumb-muted-foreground scrollbar-track-transparent overflow-y-scroll">
+        <div className="flex flex-col items-center space-y-3 w-80 h-48 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-corner-inherit scrollbar-none scrollbar-thumb-muted-foreground scrollbar-track-transparent overflow-y-scroll">
           {filteredList.length > 0 ? (
             <>
               {filteredList.map((item) => {

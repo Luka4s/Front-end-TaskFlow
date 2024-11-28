@@ -149,7 +149,7 @@ export function CardTask({
                           <span>Data de criação: {createDate} </span>
                         </div>
                         <DialogHeader>
-                          <div className="flex flex-col  w-2/4 space-y-2">
+                          <div className="flex flex-col text-nowrap w-2/4 space-y-2">
                             <DialogTitle>
                               <span>Alterar titulo da atividade</span>
                             </DialogTitle>
@@ -161,7 +161,7 @@ export function CardTask({
                               onChange={(e) => setNewTitle(e.target.value)}
                             />
                           </div>
-                          <DialogDescription>
+                          <DialogDescription className="text-start">
                             <span className="text-black">
                               Adicione aqui suas anotações:
                             </span>
