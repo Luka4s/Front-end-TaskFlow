@@ -53,7 +53,7 @@ export function List() {
     async function handleGetTasks() {
       if (isAuthenticate) {
         try {
-          const response = await api.get(`/${userCredentials.userId}`);
+          const response = await api.get(`/list/${userCredentials.userId}`);
           const tasks = response.data;
           setTaskList(tasks);
           setCountTasks(tasks.length);
