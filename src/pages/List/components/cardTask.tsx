@@ -30,6 +30,7 @@ import {
 } from "../../../components/ui/accordion";
 import { Input } from "../../../components/ui/input";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 interface CardTaskProps {
   id: number;
@@ -93,6 +94,7 @@ export function CardTask({
       contentTask: newContent,
       itensInTask: listItens,
     });
+    toast.success("Atualização efetuada com sucesso !");
   }
 
   function handleAddItemInTask() {
@@ -187,7 +189,7 @@ export function CardTask({
                       }}
                     />
                     <Button
-                      type="submit"
+                      type="button"
                       className="text-emerald-500 border-2  border-emerald-500  hover:bg-emerald-700 hover:text-zinc-50"
                       variant={"ghost"}
                       onClick={() => handleAddItemInTask()}
