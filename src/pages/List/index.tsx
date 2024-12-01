@@ -75,7 +75,7 @@ export function List() {
           toast.error("Ocorreu um erro na busca dos itens !");
         }
       } else {
-        navigate("/");
+        navigate("/login");
       }
     }
 

@@ -27,15 +27,11 @@ export function SignIn() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      const getUserCredentials = localStorage.getItem("user");
-
-      const userCredentials =
-        getUserCredentials && JSON.parse(getUserCredentials);
-
-      navigate(`/${userCredentials.user_id}`);
+      navigate(`/`);
       setIsAuthenticate(true);
     } else {
-      navigate("/");
+      console.log("A");
+      navigate("/login");
       setIsAuthenticate(false);
     }
   }, [navigate, setIsAuthenticate]);
@@ -61,7 +57,7 @@ export function SignIn() {
         localStorage.setItem("user", JSON.stringify(saveUserCredentials));
 
         setTimeout(() => {
-          navigate(`/${saveUserCredentials.userId}`);
+          navigate(`/`);
         }, 2000);
       } else if (response.status === 401) {
         toast.error("Cadastro não encontrado !");
