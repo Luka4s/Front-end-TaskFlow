@@ -43,6 +43,10 @@ export function List() {
   useEffect(() => {
     const getUserCredentials = localStorage.getItem("user");
 
+    if (!getUserCredentials) {
+      navigate("/login");
+    }
+
     const userCredentials: CredentialsProps = getUserCredentials
       ? JSON.parse(getUserCredentials)
       : null;
@@ -219,7 +223,7 @@ export function List() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    navigate("/");
+    navigate("/login");
   }
 
   return (
