@@ -5,11 +5,11 @@ import { RegisterUser } from "./pages/registerUser";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <SignIn />,
   },
   {
-    path: "/list",
+    path: "/:id",
     element: <List />,
   },
   {

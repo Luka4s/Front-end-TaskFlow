@@ -27,8 +27,12 @@ export function SignIn() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      navigate("/list");
+      const getUserCredentials = localStorage.getItem("user");
 
+      const userCredentials =
+        getUserCredentials && JSON.parse(getUserCredentials);
+
+      navigate(`/${userCredentials.user_id}`);
       setIsAuthenticate(true);
     } else {
       navigate("/");
@@ -57,7 +61,7 @@ export function SignIn() {
         localStorage.setItem("user", JSON.stringify(saveUserCredentials));
 
         setTimeout(() => {
-          navigate("/list");
+          navigate(`/${saveUserCredentials.userId}`);
         }, 2000);
       } else if (response.status === 401) {
         toast.error("Cadastro não encontrado !");
