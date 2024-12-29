@@ -176,7 +176,6 @@ export function List() {
   }
 
   async function handleCheckedTask(taskId: number) {
-    console.log("rodou", taskId);
     try {
       await api.patch(`/update-task/${taskId}`, {
         checkedTask: true,
@@ -194,7 +193,6 @@ export function List() {
           }
         });
       });
-      console.log("Try", taskList);
 
       toast.success("Tarefa marcada como concluída.");
       setTaskListCheck(taskListCheck + 1);
@@ -249,7 +247,7 @@ export function List() {
                 className="flex flex-col space-y-3 "
               >
                 <AccordionContent className="flex flex-col w-full space-y-2">
-                  <label htmlFor="title" className="text-lg">
+                  <label htmlFor="title" className="text-lg cursor-pointer">
                     Título da nova atividade:
                   </label>
                   <Input
@@ -261,8 +259,11 @@ export function List() {
                     required
                   />
 
-                  <label htmlFor="contentTask" className="text-base">
-                    Digite o conteúdo da nova atividade:
+                  <label
+                    htmlFor="contentTask"
+                    className="text-base cursor-pointer"
+                  >
+                    Digite a descrição da nova atividade:
                   </label>
                   <Textarea
                     id="contentTask"
@@ -281,37 +282,6 @@ export function List() {
               </form>
             </AccordionItem>
           </Accordion>
-
-          {/*  <form onSubmit={handleAddTask} className="flex flex-col space-y-3">
-            <label htmlFor="title" className="text-lg">
-              Título da nova atividade:
-            </label>
-            <Input
-              type="text"
-              id="title"
-              className="text-black rounded-lg border-2 border-muted-foreground  bg-white "
-              value={titleTask}
-              onChange={(e) => setTitleTask(e.target.value)}
-              required
-            />
-
-            <label htmlFor="contentTask" className="text-base">
-              Digite o conteúdo da nova atividade:
-            </label>
-            <Textarea
-              id="contentTask"
-              className="text-black border-muted-foreground resize-none"
-              value={contentTask}
-              onChange={(e) => setContentTask(e.target.value)}
-            />
-            <Button
-              type="submit"
-              variant={"ghost"}
-              className="bg-emerald-600 text-zinc-50"
-            >
-              Criar uma nova atividade
-            </Button>
-          </form> */}
 
           <Accordion type="single" collapsible>
             <AccordionItem value={"item-1"}>
