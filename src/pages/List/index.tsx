@@ -38,6 +38,8 @@ export function List() {
   const [nameProfile, setNameProfile] = useState("");
   const [idProfile, setIdProfile] = useState(0);
 
+  const listToUse = filteredList.length > 0 ? filteredList : taskList;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -117,7 +119,7 @@ export function List() {
       toast.success("Tarefa criada com sucesso !");
     } catch (error) {
       console.error("Ocorreu um erro na criação da tarefa !", error);
-      toast.warning("Ocorreu um erro na criação da tarefa !");
+      toast.error("Ocorreu um erro na criação da tarefa !");
     }
 
     setTitleTask("");
@@ -142,17 +144,20 @@ export function List() {
       setCountTasks(countTasks - 1);
       toast.success("Tarefa excluída com sucesso !");
     } catch (error) {
-      console.log("Ocorreu um erro na tentativa de excluir a atividade !");
+      console.log("Ocorreu um erro na tentativa de excluir a tarefa !");
+      toast.error("Ocorreu um erro na tentativa de excluir a tarefa !");
     }
   }
 
   async function handleUpdateTask(taskToUpdate: TaskListProps) {
     try {
+      console.log(taskToUpdate);
       await api.patch(`/update-task/${taskToUpdate.id}`, {
         checkedTask: taskToUpdate.checkedTask,
         titleTask: taskToUpdate.titleTask,
         contentTask: taskToUpdate.contentTask,
         itensInTask: taskToUpdate.itensInTask,
+        conclued_step: taskToUpdate.conclued_step,
       });
 
       const updateTask = taskList.map((item) => {
@@ -162,6 +167,7 @@ export function List() {
             titleTask: taskToUpdate.titleTask,
             contentTask: taskToUpdate.contentTask,
             itensInTask: taskToUpdate.itensInTask,
+            conclued_step: taskToUpdate.conclued_step,
           };
         } else {
           return item;
@@ -313,47 +319,26 @@ export function List() {
           </span>
         </div>
         <div className="flex flex-col items-center space-y-3 w-80 h-52 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-corner-inherit scrollbar-none scrollbar-thumb-muted-foreground scrollbar-track-transparent overflow-y-scroll">
-          {filteredList.length > 0 ? (
-            <>
-              {filteredList.map((item) => {
-                return (
-                  <div key={item.id}>
-                    <CardTask
-                      id={item.id}
-                      title={item.titleTask}
-                      content={item.contentTask}
-                      itensInTask={item.itensInTask}
-                      checked={item.checkedTask}
-                      createdAt={item.created_at}
-                      handleUpdateTask={handleUpdateTask}
-                      handleRemoveTask={handleRemoveTask}
-                      handleCheckedTask={handleCheckedTask}
-                    />
-                  </div>
-                );
-              })}
-            </>
-          ) : (
-            <>
-              {taskList.map((item) => {
-                return (
-                  <div key={item.id}>
-                    <CardTask
-                      id={item.id}
-                      title={item.titleTask}
-                      content={item.contentTask}
-                      checked={item.checkedTask}
-                      createdAt={item.created_at}
-                      itensInTask={item.itensInTask}
-                      handleUpdateTask={handleUpdateTask}
-                      handleRemoveTask={handleRemoveTask}
-                      handleCheckedTask={handleCheckedTask}
-                    />
-                  </div>
-                );
-              })}
-            </>
-          )}
+          <>
+            {listToUse.map((item) => {
+              return (
+                <div key={item.id}>
+                  <CardTask
+                    id={item.id}
+                    title={item.titleTask}
+                    content={item.contentTask}
+                    itensInTask={item.itensInTask}
+                    checked={item.checkedTask}
+                    createdAt={item.created_at}
+                    concluedStep={item?.conclued_step}
+                    handleUpdateTask={handleUpdateTask}
+                    handleRemoveTask={handleRemoveTask}
+                    handleCheckedTask={handleCheckedTask}
+                  />
+                </div>
+              );
+            })}
+          </>
         </div>
       </div>
     </>

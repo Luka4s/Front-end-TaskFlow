@@ -30,7 +30,6 @@ export function SignIn() {
       navigate(`/`);
       setIsAuthenticate(true);
     } else {
-      console.log("A");
       navigate("/login");
       setIsAuthenticate(false);
     }
@@ -39,6 +38,8 @@ export function SignIn() {
   async function handleAuthUser() {
     try {
       const response = await api.get(`/login/${userLogin}`);
+
+      console.log(response);
 
       if (userLogin.trim() === response.data.user_Login) {
         toast.success("Login efetuado com sucesso!");
@@ -51,7 +52,7 @@ export function SignIn() {
 
         const saveUserCredentials: CredentialsProps = {
           userName: response.data.user_Name,
-          userId: response.data.user_id,
+          userId: response.data.user_Id,
         };
 
         localStorage.setItem("user", JSON.stringify(saveUserCredentials));

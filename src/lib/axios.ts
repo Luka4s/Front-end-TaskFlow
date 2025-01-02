@@ -1,7 +1,14 @@
 import axios from "axios";
 
-export const api = axios.create({
-  baseURL: "https://task-flow-api.vercel.app",
-});
+const aplication = import.meta.env.VITE_APLICATION;
 
-console.log(process.env.NODE_ENV);
+const baseURL =
+  aplication === "development"
+    ? "http://127.0.0.1:3000"
+    : "https://task-flow-api.vercel.app";
+
+console.log(baseURL);
+
+export const api = axios.create({
+  baseURL,
+});

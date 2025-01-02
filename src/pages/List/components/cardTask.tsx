@@ -38,6 +38,7 @@ interface CardTaskProps {
   content: string;
   checked: boolean;
   itensInTask: ItemInTaskProps[];
+  concluedStep?: ItemInTaskProps[];
   createdAt?: string;
   handleRemoveTask: (taskId: number) => void;
   handleUpdateTask: (taskToUpdate: TaskListProps) => void;
@@ -49,6 +50,7 @@ export function CardTask({
   title,
   content,
   itensInTask,
+  concluedStep,
   checked,
   createdAt,
   handleRemoveTask,
@@ -56,19 +58,22 @@ export function CardTask({
   handleCheckedTask,
 }: CardTaskProps) {
   useEffect(() => {
-    let formattedList: ItemInTaskProps[] = [];
+    let formattedItensInTask: ItemInTaskProps[] = [];
+    let formattedConcluedItensInTask: ItemInTaskProps[] = [];
 
-    if (typeof itensInTask === "string") {
+    if (typeof itensInTask === "string" && typeof concluedStep === "string") {
       try {
-        formattedList = JSON.parse(itensInTask);
+        formattedItensInTask = JSON.parse(itensInTask);
+        formattedConcluedItensInTask = JSON.parse(concluedStep);
       } catch (error) {
         console.error("Erro ao converter dados !", error);
       }
     } else if (Array.isArray(itensInTask)) {
-      formattedList = itensInTask;
+      formattedItensInTask = itensInTask;
     }
 
-    setListItens(formattedList);
+    setListItens(formattedItensInTask);
+    setConcluedItensInTask(formattedConcluedItensInTask);
   }, [itensInTask]);
 
   const [newTitle, setNewTitle] = useState(title);
@@ -76,6 +81,9 @@ export function CardTask({
 
   const [textItemInTask, setTextItemInTask] = useState("");
   const [listItens, setListItens] = useState<ItemInTaskProps[]>([]);
+  const [concluedItensInTask, setConcluedItensInTask] = useState<
+    ItemInTaskProps[]
+  >([]);
 
   const transformDate = createdAt && new Date(createdAt);
 
@@ -93,6 +101,7 @@ export function CardTask({
       titleTask: newTitle,
       contentTask: newContent,
       itensInTask: listItens,
+      conclued_step: concluedItensInTask,
     });
     toast.success("Atualização efetuada com sucesso !");
   }
@@ -107,7 +116,11 @@ export function CardTask({
       setTextItemInTask("");
     }
   }
-  function handleRemoveItemInTask(itemId: number) {
+  function handleConcluedItensInTask(itemId: number) {
+    const concluedItem = listItens.find((item) => item.id === itemId);
+    if (concluedItem) {
+      setConcluedItensInTask([...concluedItensInTask, concluedItem]);
+    }
     const listOfFilteredItems = listItens.filter((item) => item.id !== itemId);
     setListItens(listOfFilteredItems);
   }
@@ -153,7 +166,7 @@ export function CardTask({
                         <DialogHeader>
                           <div className="flex flex-col text-nowrap w-2/4 space-y-2">
                             <DialogTitle>
-                              <span>Alterar titulo da atividade</span>
+                              <span>Alterar titulo da tarefa</span>
                             </DialogTitle>
                             <input
                               type="text"
@@ -165,7 +178,11 @@ export function CardTask({
                           </div>
                           <DialogDescription className="text-start">
                             <span className="text-black">
-                              Adicione aqui suas anotações:
+                              Adicione aqui suas{" "}
+                              <span className="font-semibold">
+                                anotações/descrição
+                              </span>
+                              :
                             </span>
                           </DialogDescription>
                         </DialogHeader>
@@ -181,7 +198,7 @@ export function CardTask({
                   <div className="flex w-full justify-between items-center p-1 gap-2 border-2 border-muted-foreground rounded-lg hover:cursor-pointer">
                     <Input
                       type="text"
-                      placeholder="Adicionar um novo item"
+                      placeholder="Adicionar etapas"
                       className="flex-1 h-full text-center border-none focus:border-none"
                       value={textItemInTask}
                       onChange={(e) => {
@@ -190,7 +207,7 @@ export function CardTask({
                     />
                     <Button
                       type="button"
-                      className="text-emerald-500 border-2  border-emerald-500  hover:bg-emerald-700 hover:text-zinc-50"
+                      className="text-emerald-500 border-2  border-emerald-500  hover:bg-emerald-700 hover:text-zinc-50 active:scale-95"
                       variant={"ghost"}
                       onClick={() => handleAddItemInTask()}
                     >
@@ -205,16 +222,33 @@ export function CardTask({
                           className="flex items-center justify-between border-2 border-muted-foreground rounded-lg p-2"
                         >
                           <span>{item.itens}</span>
-                          <div
-                            onClick={() => handleRemoveItemInTask(item.id)}
-                            className="hover:cursor-pointer size-6 border-2 rounded-full border-emerald-500 hover:border-emerald-800 hover:bg-emerald-800"
+                          <button
+                            onClick={() => handleConcluedItensInTask(item.id)}
+                            className="hover:cursor-pointer size-6 border-2 rounded-full border-emerald-500 hover:border-emerald-800 hover:bg-emerald-800 active:scale-95"
                           >
                             <Check className="size-5 text-emerald-500 hover:text-emerald-50" />
-                          </div>
+                          </button>
                         </div>
                       );
                     })}
                   </div>
+                  <Accordion type="multiple">
+                    <AccordionItem value="1">
+                      <AccordionTrigger>Etapas concluídas</AccordionTrigger>
+                      <AccordionContent className="space-y-2 h-36 overflow-y-scroll scrollbar-none ">
+                        {concluedItensInTask.map((item) => {
+                          return (
+                            <div
+                              key={item.id}
+                              className="flex items-center text-sm justify-between border-2 border-emerald-600 rounded-lg p-1 "
+                            >
+                              {item.itens}
+                            </div>
+                          );
+                        })}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                   <div className="flex items-center justify-center">
                     <DialogClose asChild>
                       <Button

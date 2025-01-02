@@ -31,6 +31,7 @@ export interface TaskListProps {
   contentTask: string;
   created_at?: string;
   itensInTask: ItemInTaskProps[];
+  conclued_step?: ItemInTaskProps[];
 }
 
 export interface ItemInTaskProps {
