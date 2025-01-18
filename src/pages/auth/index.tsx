@@ -38,7 +38,7 @@ export function SignIn() {
     try {
       const response = await api.get(`/login/${userLogin}`, {
         headers: {
-          Authorization: "Access-Control-Allow-Origin",
+          withCredentials: true,
         },
       });
 
