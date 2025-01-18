@@ -36,7 +36,11 @@ export function SignIn() {
 
   async function handleAuthUser() {
     try {
-      const response = await api.get(`/login/${userLogin}`);
+      const response = await api.get(`/login/${userLogin}`, {
+        headers: {
+          Authorization: "Access-Control-Allow-Origin",
+        },
+      });
 
       if (response.status === 200) {
         toast.success("Login efetuado com sucesso!");
