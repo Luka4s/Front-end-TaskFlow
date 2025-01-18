@@ -37,9 +37,7 @@ export function SignIn() {
   async function handleAuthUser() {
     try {
       const response = await api.get(`/login/${userLogin}`, {
-        headers: {
-          withCredentials: true,
-        },
+        withCredentials: true,
       });
 
       if (response.status === 200) {
