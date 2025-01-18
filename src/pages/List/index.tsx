@@ -43,38 +43,56 @@ export function List() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getUserCredentials = localStorage.getItem("user");
-
-    if (!getUserCredentials) {
-      navigate("/login");
-    }
-
-    const userCredentials: CredentialsProps = getUserCredentials
-      ? JSON.parse(getUserCredentials)
-      : null;
-
-    setNameProfile(userCredentials.userName);
-    setIdProfile(userCredentials.userId);
-
     async function handleGetTasks() {
       if (isAuthenticate) {
         try {
-          const response = await api.get(`/list/${userCredentials.userId}`);
-          const tasks = response.data;
-          setTaskList(tasks);
-          setCountTasks(tasks.length);
+          const authResponse = await api.get("/check-cookie", {
+            withCredentials: true,
+          });
 
-          const checkedTasksCount = tasks.filter(
-            (task: TaskListProps) => task.checkedTask
-          ).length;
-          setTaskListCheck(checkedTasksCount);
+          const token = authResponse.data.token;
+          console.log("Token", token.auth);
+          console.log(authResponse);
 
-          if (response.data.itensInTask) {
-            const parsedItensInTask =
-              typeof response.data.itensInTask === "string"
-                ? JSON.parse(response.data.itensInTask)
-                : response.data.itensInTask;
-            setItensInTask(parsedItensInTask);
+          const getUserCredentials = localStorage.getItem("user");
+
+          const userCredentials: CredentialsProps = getUserCredentials
+            ? JSON.parse(getUserCredentials)
+            : null;
+
+          setNameProfile(userCredentials.userName);
+          setIdProfile(userCredentials.userId);
+
+          if (token.auth) {
+            const response = await api.get(`/list/${userCredentials.userId}`, {
+              withCredentials: true,
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token.auth}`,
+              },
+            });
+            const tasks = response.data;
+            setTaskList(tasks);
+            setCountTasks(tasks.length);
+
+            const checkedTasksCount = tasks.filter(
+              (task: TaskListProps) => task.checkedTask
+            ).length;
+            setTaskListCheck(checkedTasksCount);
+
+            if (response.data.itensInTask) {
+              const parsedItensInTask =
+                typeof response.data.itensInTask === "string"
+                  ? JSON.parse(response.data.itensInTask)
+                  : response.data.itensInTask;
+              setItensInTask(parsedItensInTask);
+            }
+          } else {
+            toast.error("Sua sessão expirou, faça login novamente !");
+            localStorage.removeItem("user");
+            setTimeout(() => {
+              navigate("/login");
+            }, 4000);
           }
         } catch (error) {
           console.error("Ocorreu um erro na busca dos itens !", error);
@@ -224,7 +242,6 @@ export function List() {
   }
 
   function handleUserLogOut() {
-    localStorage.removeItem("token");
     localStorage.removeItem("user");
 
     navigate("/login");

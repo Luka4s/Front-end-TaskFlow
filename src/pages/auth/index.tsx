@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { FormEvent, useEffect } from "react";
 import { api } from "../../lib/axios";
 import { Input } from "../../components/ui/input";
-import CryptoJS from "crypto-js";
 
 export interface CredentialsProps {
   userName: string;
@@ -39,20 +38,14 @@ export function SignIn() {
     try {
       const response = await api.get(`/login/${userLogin}`);
 
-      console.log(response);
-
-      if (userLogin.trim() === response.data.user_Login) {
+      if (response.status === 200) {
         toast.success("Login efetuado com sucesso!");
 
         setIsAuthenticate(true);
 
-        const encrypted = CryptoJS.SHA256(userLogin).toString();
-
-        localStorage.setItem("token", encrypted);
-
         const saveUserCredentials: CredentialsProps = {
           userName: response.data.user_Name,
-          userId: response.data.user_id,
+          userId: response.data.user_Id,
         };
 
         localStorage.setItem("user", JSON.stringify(saveUserCredentials));
