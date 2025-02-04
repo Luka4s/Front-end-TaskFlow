@@ -47,7 +47,7 @@ export function SignIn() {
 
         const saveUserCredentials: CredentialsProps = {
           userName: response.data.user_Name,
-          userId: response.data.user_Id,
+          userId: response.data.user_id,
         };
 
         localStorage.setItem("user", JSON.stringify(saveUserCredentials));
